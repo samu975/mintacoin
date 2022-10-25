@@ -134,6 +134,22 @@ defmodule Mintacoin.Accounts.AccountsTest do
     end
   end
 
+  describe "retrieve_by_api_key_id/1" do
+    setup do
+      api_key = insert(:api_key)
+
+      %{api_key: api_key}
+    end
+
+    test "when api key id exist", %{api_key: %{id: api_key_id, account_id: account_id}} do
+      {:ok, %Account{id: ^account_id}} = Accounts.retrieve_by_api_key_id(api_key_id)
+    end
+
+    test "when api key doesn't exist", %{not_found_uuid: not_found_uuid} do
+      {:ok, nil} = Accounts.retrieve_by_api_key_id(not_found_uuid)
+    end
+  end
+
   describe "create_trustline/1" do
     setup [:successful_transaction, :create_asset, :create_trustor, :create_trustline]
 

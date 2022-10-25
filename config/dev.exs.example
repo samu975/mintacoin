@@ -38,6 +38,9 @@ config :mintacoin, blockchains_network: "BLOCKCHAINS_NETWORK"
 # Temporal API Authentication
 config :mintacoin, api_token: "API_TOKEN"
 
+# Secret to generate authentication token
+config :mintacoin, secret_token: "SECRET_TOKEN"
+
 # Stellar SDK configuration
 config :stellar_sdk, network: :test
 

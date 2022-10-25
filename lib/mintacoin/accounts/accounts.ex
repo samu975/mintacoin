@@ -10,6 +10,7 @@ defmodule Mintacoin.Accounts do
     Account,
     Accounts.Cipher,
     Accounts.Keypair,
+    ApiKey,
     Asset,
     AssetHolder,
     AssetHolders,
@@ -29,6 +30,7 @@ defmodule Mintacoin.Accounts do
   @type asset :: Asset.t()
   @type asset_holder :: AssetHolder.t()
   @type asset_code :: String.t()
+  @type api_key :: ApiKey.t() | nil
   @type params :: map()
   @type wallet :: Wallet.t()
   @type encrypted_key :: String.t()
@@ -113,6 +115,18 @@ defmodule Mintacoin.Accounts do
       )
 
     {:ok, Repo.all(query)}
+  end
+
+  @spec retrieve_by_api_key_id(api_key_id :: id()) :: {:ok, api_key()}
+  def retrieve_by_api_key_id(api_key_id) do
+    query =
+      from(account in Account,
+        join: api_key in ApiKey,
+        on: account.id == api_key.account_id,
+        where: api_key.id == ^api_key_id
+      )
+
+    {:ok, Repo.one(query)}
   end
 
   @spec system_encrypt_secret_key(

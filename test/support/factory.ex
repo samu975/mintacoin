@@ -6,6 +6,7 @@ defmodule Mintacoin.Factory do
 
   use Mintacoin.{
     AccountFactory,
+    ApiKeyFactory,
     AssetFactory,
     AssetHolderFactory,
     BalancesFactory,

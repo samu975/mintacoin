@@ -71,4 +71,7 @@ if config_env() == :prod do
 
   # Temporal API Authentication
   config :mintacoin, api_token: System.fetch_env!("API_TOKEN")
+
+  # Secret to generate authentication token
+  config :mintacoin, secret_token: System.fetch_env!("SECRET_TOKEN")
 end
