@@ -8,7 +8,7 @@ defmodule Mintacoin.Account do
   import Ecto.Changeset
 
   alias Ecto.Changeset
-  alias Mintacoin.{AssetHolder, Wallet}
+  alias Mintacoin.{AssetHolder, Customer, Wallet}
 
   @type t :: %__MODULE__{
           address: String.t(),
@@ -25,6 +25,7 @@ defmodule Mintacoin.Account do
 
     has_many(:wallets, Wallet)
     has_many(:asset_holders, AssetHolder)
+    has_one(:customer, Customer)
 
     timestamps()
   end
