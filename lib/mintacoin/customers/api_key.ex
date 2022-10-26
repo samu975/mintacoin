@@ -35,8 +35,7 @@ defmodule Mintacoin.ApiKey do
 
   @spec changeset(api_key :: %__MODULE__{}, changes :: map()) :: Changeset.t()
   def changeset(api_key, changes) do
-    api_key
-    |> cast(changes, [:encrypted_api_key, :name])
+    cast(api_key, changes, [:encrypted_api_key, :name])
   end
 
   @spec create_changeset(api_key :: %__MODULE__{}, attrs :: map()) :: Changeset.t()
@@ -45,6 +44,6 @@ defmodule Mintacoin.ApiKey do
     |> cast(attrs, [:account_id, :api_key, :encrypted_api_key, :name])
     |> validate_required([:account_id, :api_key, :encrypted_api_key, :name])
     |> foreign_key_constraint(:account_id)
-    |> unique_constraint(:account_id, name: :account_id_api_key_index)
+    |> unique_constraint([:account_id, :api_key], name: :account_id_api_key_index)
   end
 end

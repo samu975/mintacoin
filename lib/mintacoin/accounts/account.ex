@@ -25,7 +25,7 @@ defmodule Mintacoin.Account do
 
     has_many(:wallets, Wallet)
     has_many(:asset_holders, AssetHolder)
-    has_many(:api_keys, ApiKey)
+    has_one(:api_keys, ApiKey)
 
     timestamps()
   end
