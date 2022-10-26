@@ -33,7 +33,10 @@ config :mintacoin, Oban, testing: :inline
 config :mintacoin, encryption_variable: "HQHSCWQ4HNBMLFUWHU2S7H3KGU"
 
 # Secret to generate authentication token
-config :mintacoin, secret_token: "c2RfNcZKJMNMM+Moakz6B/Xe0jViiiYh"
+config :mintacoin,
+  secret_key_base: "TsKzdh4cyS0eYXjISZmZzlbOriQvzIXf5cj6mX7OfUFLLq2RdzuH2+uCg3+3jRNe"
+
+config :mintacoin, signing_salt: "g6gVDdqHZeWeLiH1i5b7QlhZGNr2PaLo"
 
 # Stellar SDK configuration
 config :stellar_sdk, network: :test

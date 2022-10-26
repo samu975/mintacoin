@@ -13,19 +13,6 @@ defmodule Mintacoin.Customers.ApiKeysTest do
   setup do
     :ok = Sandbox.checkout(Mintacoin.Repo)
 
-    Application.put_env(
-      :mintacoin,
-      :secret_key_base,
-      "TsKzdh4cyS0eYXjISZmZzlbOriQvzIXf5cj6mX7OfUFLLq2RdzuH2+uCg3+3jRNe"
-    )
-
-    Application.put_env(:mintacoin, :signing_salt, "g6gVDdqHZeWeLiH1i5b7QlhZGNr2PaLo")
-
-    on_exit(fn ->
-      Application.delete_env(:mintacoin, :secret_key_base)
-      Application.delete_env(:mintacoin, :signing_salt)
-    end)
-
     account = insert(:account)
     api_key = insert(:api_key)
 

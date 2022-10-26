@@ -73,5 +73,6 @@ if config_env() == :prod do
   config :mintacoin, api_token: System.fetch_env!("API_TOKEN")
 
   # Secret to generate authentication token
-  config :mintacoin, secret_token: System.fetch_env!("SECRET_TOKEN")
+  config :mintacoin, secret_key_base: System.fetch_env!("SECRET_KEY_BASE")
+  config :mintacoin, signing_salt: System.fetch_env!("SIGNING_SALT")
 end
