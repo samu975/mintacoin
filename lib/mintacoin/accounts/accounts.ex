@@ -10,7 +10,6 @@ defmodule Mintacoin.Accounts do
     Account,
     Accounts.Cipher,
     Accounts.Keypair,
-    Asset,
     AssetHolder,
     AssetHolders,
     Blockchain,

@@ -6,6 +6,7 @@ defmodule MintacoinWeb.Plugs.VerifyApiToken do
 
   import Plug.Conn, only: [put_status: 2, halt: 1, get_req_header: 2]
   import Phoenix.Controller, only: [put_view: 2, render: 3]
+  alias Mintacoin.Customers
   alias MintacoinWeb.ErrorView
 
   @type conn :: Plug.Conn.t()
@@ -17,28 +18,28 @@ defmodule MintacoinWeb.Plugs.VerifyApiToken do
 
   @impl true
   def call(conn, _default) do
-    basic_token = get_token(conn)
-    valid_token = Application.get_env(:mintacoin, :api_token)
-
-    resolve_authorization(basic_token, valid_token, conn)
-  end
-
-  @spec resolve_authorization(token :: token(), token :: token(), conn :: conn()) :: conn()
-  defp resolve_authorization(token, token, conn), do: conn
-
-  defp resolve_authorization(nil, _token, conn) do
     conn
-    |> put_status(:unauthorized)
-    |> put_view(ErrorView)
-    |> render("401.json", %{message: "Missing authorization Bearer token"})
-    |> halt()
+    |> get_token
+    |> Customers.verify_customer()
+    |> resolve_authorization(conn)
   end
 
-  defp resolve_authorization(_request_token, _token, conn) do
+  @spec resolve_authorization(params :: tuple(), conn :: conn()) :: conn()
+  defp resolve_authorization({:ok, _token}, conn), do: conn
+
+  defp resolve_authorization({:error, :invalid}, conn) do
     conn
     |> put_status(:unauthorized)
     |> put_view(ErrorView)
     |> render("401.json", %{message: "Invalid authorization Bearer token"})
+    |> halt()
+  end
+
+  defp resolve_authorization({:error, :missing}, conn) do
+    conn
+    |> put_status(:unauthorized)
+    |> put_view(ErrorView)
+    |> render("401.json", %{message: "Missing authorization Bearer token"})
     |> halt()
   end
 
