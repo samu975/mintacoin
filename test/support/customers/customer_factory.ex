@@ -1,15 +1,15 @@
-defmodule Mintacoin.ApiKeyFactory do
+defmodule Mintacoin.CustomerFactory do
   @moduledoc """
-  Allow the creation of Apikey while testing.
+  Allow the creation of Customer while testing.
   """
 
   alias Ecto.UUID
-  alias Mintacoin.ApiKey
+  alias Mintacoin.Customer
 
   defmacro __using__(_opts) do
     quote do
-      @spec api_key_factory(attrs :: map()) :: ApiKey.t()
-      def api_key_factory(attrs) do
+      @spec customer_factory(attrs :: map()) :: Customer.t()
+      def customer_factory(attrs) do
         default_api_key =
           "SFMyNTY.g2gDdAAAAAFkAAphY2NvdW50X2lkbQAAACQ4ZDkzYTkyOC05ZjM5LTQ4ZWMtOGIyNy0xZTdmN2NiZmE3NGVuBgDZmfYPhAFiAFxJAA.SRlUgdy7igREKsUdMM3POiqKZMr5bke9xAq8qa_ad_A"
 
@@ -21,7 +21,7 @@ defmodule Mintacoin.ApiKeyFactory do
         api_key = Map.get(attrs, :api_key, default_api_key)
         encrypted_api_key = Map.get(attrs, :encrypted_api_key, default_encrypted_api_key)
 
-        %ApiKey{
+        %Customer{
           id: UUID.generate(),
           name: name,
           account: account,

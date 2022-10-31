@@ -1,6 +1,6 @@
-defmodule Mintacoin.ApiKey do
+defmodule Mintacoin.Customer do
   @moduledoc """
-  Ecto schema for ApiKeys
+  Ecto schema for customers
   """
 
   use Ecto.Schema
@@ -10,10 +10,10 @@ defmodule Mintacoin.ApiKey do
   alias Ecto.{Changeset, UUID}
   alias Mintacoin.Account
 
-  @type api_key :: String.t()
-  @type encrypted_api_key :: String.t()
   @type id :: UUID.t()
   @type name :: String.t()
+  @type encrypted_api_key :: String.t()
+  @type api_key :: String.t()
 
   @type t :: %__MODULE__{
           name: name(),
@@ -23,7 +23,7 @@ defmodule Mintacoin.ApiKey do
         }
 
   @primary_key {:id, :binary_id, autogenerate: true}
-  schema "api_keys" do
+  schema "customers" do
     field(:name, :string)
     field(:encrypted_api_key, :string)
     field(:api_key, :string, virtual: true)
@@ -33,17 +33,17 @@ defmodule Mintacoin.ApiKey do
     timestamps()
   end
 
-  @spec changeset(api_key :: %__MODULE__{}, changes :: map()) :: Changeset.t()
-  def changeset(api_key, changes) do
-    cast(api_key, changes, [:encrypted_api_key, :name])
+  @spec changeset(customer :: %__MODULE__{}, changes :: map()) :: Changeset.t()
+  def changeset(customer, changes) do
+    cast(customer, changes, [:encrypted_api_key, :name])
   end
 
-  @spec create_changeset(api_key :: %__MODULE__{}, attrs :: map()) :: Changeset.t()
-  def create_changeset(api_key, attrs) do
-    api_key
+  @spec create_changeset(customer :: %__MODULE__{}, attrs :: map()) :: Changeset.t()
+  def create_changeset(customer, attrs) do
+    customer
     |> cast(attrs, [:account_id, :api_key, :encrypted_api_key, :name])
     |> validate_required([:account_id, :api_key, :encrypted_api_key, :name])
     |> foreign_key_constraint(:account_id)
-    |> unique_constraint([:account_id, :api_key], name: :account_id_api_key_index)
+    |> unique_constraint(:account_id, name: :account_id_api_key_index)
   end
 end
