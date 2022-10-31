@@ -7,6 +7,11 @@ defmodule MintacoinWeb.Router do
     plug MintacoinWeb.Plugs.VerifyApiToken
   end
 
+  pipeline :verify_customer do
+    plug :accepts, ["json"]
+    plug MintacoinWeb.Plugs.VerifyCustomer
+  end
+
   scope "/", MintacoinWeb do
     pipe_through :api
 
@@ -16,6 +21,12 @@ defmodule MintacoinWeb.Router do
     resources "/assets", AssetsController, except: [:index]
     get "/assets/:id/issuer", AssetsController, :show_issuer
     get "/assets/:id/accounts", AssetsController, :show_accounts
+  end
+
+  scope "/", MintacoinWeb do
+    pipe_through :verify_customer
+
+    get "/customers/:address/recover", CustomerController, :verify_customer
   end
 
   # Enables LiveDashboard only for development
