@@ -12,7 +12,7 @@ defmodule Mintacoin.Account do
 
   @type t :: %__MODULE__{
           address: String.t(),
-          encrypted_signature: String.t()
+          encrypted_signature: String.t(),
         }
 
   @primary_key {:id, :binary_id, autogenerate: true}
@@ -25,7 +25,7 @@ defmodule Mintacoin.Account do
 
     has_many(:wallets, Wallet)
     has_many(:asset_holders, AssetHolder)
-    has_one(:customer, Customer)
+    belongs_to(:customer, Customer, type: :binary_id)
 
     timestamps()
   end
@@ -37,10 +37,13 @@ defmodule Mintacoin.Account do
       :address,
       :encrypted_signature,
       :seed_words,
-      :signature
+      :signature,
+      :customer_id
     ])
-    |> validate_required([:address, :encrypted_signature])
+    |> validate_required([:address, :encrypted_signature, :customer_id])
+    |> foreign_key_constraint(:customer_id)
     |> unique_constraint([:address])
     |> unique_constraint([:encrypted_signature])
+    |> unique_constraint([:customer_id])
   end
 end
