@@ -21,6 +21,7 @@ defmodule Mintacoin.Customers.CustomersTest do
       customer: customer,
       name: "Customer",
       email: "customer@customer.com",
+      invalid_email: "customer@customer.mintacoin",
       new_name: "Mintacoin",
       new_encrypted_api_key:
         "haooplkURD87vqXeq3svsKRxbokArcRhvoMnnbNbZqQRYmzrjI+Jn3gVmALejFwxgqRpbU9FmCDc5a6U3x4jW4mFqXr3I9mMoBeQS8HmLazHfDTytqhK8mCOdWkmnk7gDfbO167daVw2kK90E5jleYSY9Fcq3szryQPk5G5psP5SMkma9S9Gke+ail411PSbb/HUytuoI5hbqzyk8NbrXr3CV2w87mtcokIAznjx8Tk",
@@ -43,24 +44,14 @@ defmodule Mintacoin.Customers.CustomersTest do
        }} = Customers.create(%{email: "", name: ""})
     end
 
-    test "with invalid email", %{name: name} do
+    test "with invalid email", %{name: name, invalid_email: invalid_email} do
       {:error,
        %Changeset{
          errors: [
-           {:email, {"is invalid", _detail}}
+           {:email, {"has invalid format", _detail}}
            | _tail
          ]
-       }} = Customers.create(%{email: :invalid, name: name})
-    end
-
-    test "with invalid name", %{email: email} do
-      {:error,
-       %Changeset{
-         errors: [
-           {:name, {"is invalid", _detail}}
-           | _tail
-         ]
-       }} = Customers.create(%{email: email, name: :invalid})
+       }} = Customers.create(%{email: invalid_email, name: name})
     end
   end
 

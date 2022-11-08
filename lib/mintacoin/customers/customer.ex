@@ -23,6 +23,8 @@ defmodule Mintacoin.Customer do
           api_key: api_key()
         }
 
+  @code_regex ~r/^[A-Za-z0-9\._%+.-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/
+
   @primary_key {:id, :binary_id, autogenerate: true}
   schema "customers" do
     field(:email, :string)
@@ -45,7 +47,7 @@ defmodule Mintacoin.Customer do
     customer
     |> cast(attrs, [:api_key, :email, :encrypted_api_key, :name])
     |> validate_required([:api_key, :email, :encrypted_api_key, :name])
-    |> validate_format(:email, ~r/^[A-Za-z0-9\._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}$/)
+    |> validate_format(:email, @code_regex)
     |> unique_constraint(:email)
   end
 end
