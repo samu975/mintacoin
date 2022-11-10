@@ -16,7 +16,8 @@ defmodule Mintacoin.Customers do
   @type token_data :: map()
   @type error :: :expired | :invalid | :missing | :encryption_error | Changeset.t()
 
-  @token_age 100 * 24 * 3600
+  # 100 (days) * 24 (hours) * 3600 (sec)
+  @token_age 8_640_000
 
   @spec create(params :: params()) :: {:ok, customer()} | {:error, error()}
   def create(%{email: email, name: name}) do
