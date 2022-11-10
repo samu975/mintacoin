@@ -13,6 +13,7 @@ defmodule Mintacoin.Accounts do
     AssetHolder,
     AssetHolders,
     Blockchain,
+    Customer,
     Repo,
     Wallet
   }
@@ -27,6 +28,7 @@ defmodule Mintacoin.Accounts do
   @type account :: Account.t() | nil
   @type asset_holder :: AssetHolder.t()
   @type asset_code :: String.t()
+  @type customer :: Customer.t()| nil
   @type params :: map()
   @type wallet :: Wallet.t()
   @type encrypted_key :: String.t()
