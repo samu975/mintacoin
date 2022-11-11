@@ -63,7 +63,7 @@ defmodule Mintacoin.Customers do
   end
 
   @spec generate_encrypted_token(customer_id :: id()) :: {token(), token()}
-  defp generate_encrypted_token(customer_id) do
+  def generate_encrypted_token(customer_id) do
     sign_token = sign_token(%{customer_id: customer_id})
     {:ok, encrypted_token} = Cipher.encrypt_with_system_key(sign_token)
 

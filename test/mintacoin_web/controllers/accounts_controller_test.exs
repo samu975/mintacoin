@@ -8,7 +8,7 @@ defmodule MintacoinWeb.AccountsControllerTest do
 
   import Mintacoin.Factory, only: [insert: 1, insert: 2]
 
-  alias Mintacoin.{Accounts, Accounts.Cipher, Assets, Balances}
+  alias Mintacoin.{Accounts, Accounts.Cipher, Assets, Balances, Customer, Customers}
   alias Mintacoin.Accounts.StellarMock, as: AccountStellarMock
   alias Mintacoin.Assets.StellarMock, as: AssetStellarMock
 
@@ -23,11 +23,11 @@ defmodule MintacoinWeb.AccountsControllerTest do
     signature = "SB3RAKL2MRYZ53WJQAL5RJ42LPCMJTNDH4W7UWVRJA3GTEC66BC7VNUT"
 
     blockchain = insert(:blockchain, %{name: "stellar", network: "testnet"})
-    customer = insert(:customer, %{email: "customer.account@mail.com"})
+
+    {:ok, %Customer{api_key: api_token} = customer} =
+      Customers.create(%{email: "customer.account@mail.com", name: "Customer"})
 
     account = insert(:account, %{address: address, signature: signature, customer: customer})
-
-    api_token = Application.get_env(:mintacoin, :api_token)
 
     conn_authenticated =
       conn
