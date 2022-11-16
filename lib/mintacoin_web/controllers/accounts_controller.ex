@@ -139,8 +139,6 @@ defmodule MintacoinWeb.AccountsController do
     end
   end
 
-  defp process_trustline(error, _asset, _params), do: error
-
   @spec handle_response(
           {:ok, resource :: resource()} | {:error, error()},
           conn :: conn(),
