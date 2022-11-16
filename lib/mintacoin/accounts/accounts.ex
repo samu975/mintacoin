@@ -14,7 +14,6 @@ defmodule Mintacoin.Accounts do
     AssetHolders,
     Blockchain,
     Customer,
-    Customers,
     Repo,
     Wallet
   }
@@ -43,8 +42,7 @@ defmodule Mintacoin.Accounts do
 
   @spec create(params :: params()) :: {:ok, account()} | {:error, error()}
   def create(%{blockchain: %Blockchain{id: blockchain_id}, customer_id: customer_id}) do
-    with {:ok, %Customer{id: customer_id}} <- Customers.retrieve_by_id(customer_id),
-         {:ok, %Account{id: account_id, signature: signature} = account} <-
+    with {:ok, %Account{id: account_id, signature: signature} = account} <-
            create_db_record(customer_id),
          {:ok, encrypted_signature} <- Cipher.encrypt_with_system_key(signature) do
       %{
@@ -59,24 +57,11 @@ defmodule Mintacoin.Accounts do
     end
   end
 
-  @spec create_db_record(customer :: customer()) :: {:ok, account()} | {:error, error()}
+  @spec create_db_record(customer_id :: id()) :: {:ok, account()} | {:error, error()}
   def create_db_record(customer_id) do
-    signature_fields = Keypair.build_signature_fields()
-
-    %{
-      address: address,
-      encrypted_signature: encrypted_signature,
-      seed_words: seed_words,
-      signature: signature
-    } = signature_fields
-
-    changeset = %{
-      customer_id: customer_id,
-      address: address,
-      encrypted_signature: encrypted_signature,
-      seed_words: seed_words,
-      signature: signature
-    }
+    changeset =
+      Keypair.build_signature_fields()
+      |> Map.merge(%{customer_id: customer_id})
 
     %Account{}
     |> Account.create_changeset(changeset)

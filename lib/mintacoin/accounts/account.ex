@@ -47,6 +47,5 @@ defmodule Mintacoin.Account do
     |> foreign_key_constraint(:customer_id)
     |> unique_constraint([:address])
     |> unique_constraint([:encrypted_signature])
-    |> unique_constraint([:customer_id])
   end
 end
