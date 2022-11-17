@@ -8,7 +8,7 @@ defmodule MintacoinWeb.AssetsControllerTest do
 
   import Mintacoin.Factory, only: [insert: 1, insert: 2]
 
-  alias Mintacoin.{Accounts.Cipher, Assets.StellarMock, Customer, Customers}
+  alias Mintacoin.{Accounts.Cipher, Assets.StellarMock}
 
   setup %{conn: conn} do
     Application.put_env(:mintacoin, :crypto_impl, StellarMock)
@@ -31,8 +31,7 @@ defmodule MintacoinWeb.AssetsControllerTest do
         encrypted_secret_key: encrypted_secret_key
       })
 
-    {:ok, %Customer{api_key: api_token}} =
-      Customers.create(%{email: "customer.account@mail.com", name: "Customer"})
+    %{api_key: api_token} = insert(:customer)
 
     authenticated_conn =
       conn

@@ -6,12 +6,15 @@ defmodule MintacoinWeb.Plugs.VerifyApiToken do
 
   import Plug.Conn, only: [put_status: 2, halt: 1, get_req_header: 2, assign: 3]
   import Phoenix.Controller, only: [put_view: 2, render: 3]
-  alias Mintacoin.Customers
+  alias Ecto.UUID
+  alias Mintacoin.{Customer, Customers}
   alias MintacoinWeb.ErrorView
 
+  @type id :: UUID.t()
   @type conn :: Plug.Conn.t()
   @type status :: boolean()
   @type token :: binary() | nil
+  @type error :: :invalid | :missing
 
   @impl true
   def init(default), do: default
@@ -24,15 +27,23 @@ defmodule MintacoinWeb.Plugs.VerifyApiToken do
     conn
     |> get_token
     |> Customers.verify_customer()
+    |> validate_customer()
     |> resolve_authorization(conn)
   end
 
-  @spec resolve_authorization(params :: tuple(), conn :: conn()) :: conn()
-  defp resolve_authorization({:ok, token}, conn) do
-    %{customer_id: customer_id} = token
-
-    assign(conn, :customer_id, customer_id)
+  @spec validate_customer(params :: tuple()) :: {:ok, id()} | {:error, error()}
+  defp validate_customer({:ok, %{customer_id: customer_id}}) do
+    case Customers.retrieve_by_id(customer_id) do
+      {:ok, nil} -> {:error, :invalid}
+      {:ok, %Customer{}} -> {:ok, customer_id}
+    end
   end
+
+  defp validate_customer({:error, response}), do: {:error, response}
+
+  @spec resolve_authorization(params :: tuple(), conn :: conn()) :: conn()
+  defp resolve_authorization({:ok, customer_id}, conn),
+    do: assign(conn, :customer_id, customer_id)
 
   defp resolve_authorization({:error, :invalid}, conn) do
     conn

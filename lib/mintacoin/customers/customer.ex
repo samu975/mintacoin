@@ -25,8 +25,7 @@ defmodule Mintacoin.Customer do
 
   @code_regex ~r/^[A-Za-z0-9\._%+.-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/
 
-  @primary_key {:id, :binary_id, []}
-  @derive {Phoenix.Param, key: :id}
+  @primary_key {:id, :binary_id, autogenerate: false}
   schema "customers" do
     field(:email, :string)
     field(:name, :string)
